@@ -13,7 +13,7 @@
 #include "mgos_gpio.h"
 #include "mgos_system.h"
 
-#define NUM_CHANNELS 3 /* r, g, b */
+#define NUM_CHANNELS 4 /* r, g, b , w */ 
 
 struct mgos_neopixel {
   int pin;
@@ -58,6 +58,22 @@ void mgos_neopixel_set(struct mgos_neopixel *np, int i, int r, int g, int b) {
       p[2] = r;
       break;
 
+
+    default:
+      LOG(LL_ERROR, ("Wrong order: %d", np->order));
+      break;
+  }
+}
+
+void mgos_neopixel_set(struct mgos_neopixel *np, int i, int r, int g, int b, int w) {
+  uint8_t *p = np->data + i * NUM_CHANNELS;
+  switch (np->order) {
+    case MGOS_NEOPIXEL_ORDER_RGBW:
+      p[0] = g;
+      p[1] = r;
+      p[2] = b;
+	  p[3] = w;
+      break; 
     default:
       LOG(LL_ERROR, ("Wrong order: %d", np->order));
       break;
@@ -68,10 +84,11 @@ void mgos_neopixel_clear(struct mgos_neopixel *np) {
   memset(np->data, 0, np->num_pixels * NUM_CHANNELS);
 }
 
+//Added for writing sk6812RGBW leds
 void mgos_neopixel_show(struct mgos_neopixel *np) {
   mgos_gpio_write(np->pin, 0);
   mgos_usleep(60);
-  mgos_bitbang_write_bits(np->pin, MGOS_DELAY_100NSEC, 3, 8, 8, 6, np->data,
+  mgos_bitbang_write_bits(np->pin, MGOS_DELAY_USEC, 3, 9, 6, 6, np->data,
                           np->num_pixels * NUM_CHANNELS);
   mgos_gpio_write(np->pin, 0);
   mgos_usleep(60);

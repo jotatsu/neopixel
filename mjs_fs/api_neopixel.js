@@ -6,7 +6,7 @@ let NeoPixel = {
   RGB: 0,
   GRB: 1,
   BGR: 2,
-
+  RGBW: 3,
   // ## **`NeoPixel.create(pin, numPixels, order)`**
   // Create and return a NeoPixel strip object. Example:
   // ```javascript
@@ -34,6 +34,10 @@ let NeoPixel = {
   // Note that this only affects in-memory value of the pixel.
   setPixel: function(i, r, g, b) {
     NeoPixel._set(this._i, i, r, g, b);
+  },
+  
+  setPixel: function(i, r, g, b, w) {
+    NeoPixel._set(this._i, i, r, g, b, w);
   },
 
   // ## **`strip.clear()`**
