@@ -13,7 +13,7 @@
 #include "mgos_gpio.h"
 #include "mgos_system.h"
 
-#define NUM_CHANNELS 4 /* r, g, b , w */ 
+#define NUM_CHANNELS 4 
 
 struct mgos_neopixel {
   int pin;
@@ -22,8 +22,7 @@ struct mgos_neopixel {
   uint8_t *data;
 };
 
-struct mgos_neopixel *mgos_neopixel_create(int pin, int num_pixels,
-                                           enum mgos_neopixel_order order) {
+struct mgos_neopixel *mgos_neopixel_create(int pin, int num_pixels,enum mgos_neopixel_order order) {
   mgos_gpio_set_mode(pin, MGOS_GPIO_MODE_OUTPUT);
   /* Keep in reset */
   mgos_gpio_write(pin, 0);
@@ -65,19 +64,13 @@ void mgos_neopixel_set(struct mgos_neopixel *np, int i, int r, int g, int b) {
   }
 }
 
-void mgos_neopixel_set(struct mgos_neopixel *np, int i, int r, int g, int b, int w) {
+void mgos_neopixel_set_rgbw(struct mgos_neopixel *np, int i, int r, int g, int b, int w) {
+  LOG(LL_ERROR, ("I got here"));
   uint8_t *p = np->data + i * NUM_CHANNELS;
-  switch (np->order) {
-    case MGOS_NEOPIXEL_ORDER_RGBW:
-      p[0] = g;
-      p[1] = r;
-      p[2] = b;
-	  p[3] = w;
-      break; 
-    default:
-      LOG(LL_ERROR, ("Wrong order: %d", np->order));
-      break;
-  }
+  p[0] = g;
+  p[1] = r;
+  p[2] = b;
+  p[3] = w;
 }
 
 void mgos_neopixel_clear(struct mgos_neopixel *np) {
@@ -88,7 +81,7 @@ void mgos_neopixel_clear(struct mgos_neopixel *np) {
 void mgos_neopixel_show(struct mgos_neopixel *np) {
   mgos_gpio_write(np->pin, 0);
   mgos_usleep(60);
-  mgos_bitbang_write_bits(np->pin, MGOS_DELAY_USEC, 3, 9, 6, 6, np->data,
+  mgos_bitbang_write_bits(np->pin, MGOS_DELAY_100NSEC, 3, 8, 8, 6, np->data,
                           np->num_pixels * NUM_CHANNELS);
   mgos_gpio_write(np->pin, 0);
   mgos_usleep(60);
@@ -100,6 +93,6 @@ void mgos_neopixel_free(struct mgos_neopixel *np) {
   free(np);
 }
 
-bool mgos_neopixel_init(void) {
+bool mgos_neopixelw_init(void) {
   return true;
 }

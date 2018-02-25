@@ -19,6 +19,7 @@ enum mgos_neopixel_order {
   MGOS_NEOPIXEL_ORDER_RGB,
   MGOS_NEOPIXEL_ORDER_GRB,
   MGOS_NEOPIXEL_ORDER_BGR,
+  MGOS_NEOPIXEL_ORDER_RGBW,
 };
 
 /*
@@ -50,6 +51,8 @@ struct mgos_neopixel *mgos_neopixel_create(int pin, int num_pixels,
  * call `mgos_neopixel_show()` to apply changes.
  */
 void mgos_neopixel_set(struct mgos_neopixel *np, int i, int r, int g, int b);
+
+void mgos_neopixel_set_rgbw(struct mgos_neopixel *np, int i, int r, int g, int b, int w);
 
 /*
  * Clear in-memory values of the pixels.

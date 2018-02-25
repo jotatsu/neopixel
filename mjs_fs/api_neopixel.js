@@ -24,6 +24,7 @@ let NeoPixel = {
       _i: NeoPixel._c(pin, numPixels, order),
 
       setPixel: NeoPixel.setPixel,
+	  setPixelW: NeoPixel.setPixelW,
       clear: NeoPixel.clear,
       show: NeoPixel.show,
     });
@@ -36,8 +37,8 @@ let NeoPixel = {
     NeoPixel._set(this._i, i, r, g, b);
   },
   
-  setPixel: function(i, r, g, b, w) {
-    NeoPixel._set(this._i, i, r, g, b, w);
+  setPixelW: function(i, r, g, b, w) {
+    NeoPixel._setw(this._i, i, r, g, b, w);
   },
 
   // ## **`strip.clear()`**
@@ -54,6 +55,7 @@ let NeoPixel = {
 
   _c: ffi('void *mgos_neopixel_create(int, int, int)'),
   _set: ffi('void mgos_neopixel_set(void *, int, int, int, int)'),
+  _setw: ffi('void mgos_neopixel_set_rgbw(void *, int, int, int, int, int)'),
   _clear: ffi('void mgos_neopixel_clear(void *)'),
   _show: ffi('void mgos_neopixel_show(void *)'),
 };

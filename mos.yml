@@ -1,6 +1,6 @@
-author: mongoose-os
+author: jotatsu
+description: neopixel rgbw
 type: lib
-description: Neopixel driver
 version: 1.0
 
 sources:
@@ -12,5 +12,6 @@ tags:
   - js
   - hw
   - neopixel
+
 
 manifest_version: 2017-09-29
